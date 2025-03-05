@@ -31,7 +31,7 @@ struct WorkQueue::Private
 
   //################################################################################################
   Private(const std::string& threadName):
-    thread(new std::thread([=]{run(threadName);}))
+    thread(new std::thread([this, threadName]{run(threadName);}))
   {
 
   }
@@ -94,7 +94,7 @@ struct WorkQueue::Private
     auto task = queue.front();
     queue.pop();
 
-    auto t = new Task(taskName, [=](Task&)
+    auto t = new Task(taskName, [this, task](Task&)
     {
       task();
 
