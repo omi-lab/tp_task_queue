@@ -50,6 +50,7 @@ struct WorkQueue::Private
     {
       TP_MUTEX_LOCKER(mutex);
       finish = true;
+      queue = {};
       waitCondition.wakeAll();
     }
 
@@ -96,6 +97,12 @@ struct WorkQueue::Private
 
     auto t = new Task(taskName, [this, task](Task&)
     {
+      {
+        TP_MUTEX_LOCKER(mutex);
+        if(finish)
+          return RunAgain::No;
+      }
+
       task();
 
       {

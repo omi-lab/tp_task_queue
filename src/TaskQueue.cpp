@@ -152,8 +152,8 @@ struct TaskQueue::Private
 
             taskDetails->active = true;
 
-            lock.unlock(TPM);
             workDone = true;
+            lock.unlock(TPM);
             auto runAgain = taskDetails->task->performTask();
             lock.lock(TPM);
 
